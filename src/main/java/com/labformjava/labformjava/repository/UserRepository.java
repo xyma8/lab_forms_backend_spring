@@ -8,4 +8,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Procedure("get_hash_password_by_login")
     String hashPassword(String login);
 
+    @Procedure("get_token_by_login")
+    String getToken(String login);
 }

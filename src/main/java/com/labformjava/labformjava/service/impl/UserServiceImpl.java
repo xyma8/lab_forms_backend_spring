@@ -83,11 +83,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public String loginUser(LoginRequestDto lrDto) {
         System.out.println(lrDto.getLogin());
+        System.out.println(lrDto.getPassword());
         String hashPassword = userRepository.hashPassword(lrDto.getLogin());
         boolean match = passwordEncoder.matches(lrDto.getPassword(), hashPassword);
+        System.out.println(match);
         if(!match) {
-            new UnauthorizedException("Password incorrect");
+            throw new UnauthorizedException("Password incorrect");
         }
-        return "token";
+        return userRepository.getToken(lrDto.getLogin());
     }
 }
