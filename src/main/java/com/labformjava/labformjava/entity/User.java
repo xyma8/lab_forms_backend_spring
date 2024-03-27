@@ -9,6 +9,9 @@ import jakarta.persistence.*;
 @NamedStoredProcedureQuery(name = "users.get_token_by_login", procedureName = "get_token_by_login", parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "login", type = String.class),
         @StoredProcedureParameter(mode = ParameterMode.OUT, name = "token", type = String.class) })
+@NamedStoredProcedureQuery(name = "users.get_login_by_token", procedureName = "get_login_by_token", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "token", type = String.class),
+        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "login", type = String.class) })
 @Table(name = "users")
 public class User {
     @Id

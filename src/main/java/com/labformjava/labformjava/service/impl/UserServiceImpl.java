@@ -1,7 +1,9 @@
 package com.labformjava.labformjava.service.impl;
 
 import com.labformjava.labformjava.dto.LoginRequestDto;
+import com.labformjava.labformjava.dto.UserDataDto;
 import com.labformjava.labformjava.dto.UserDto;
+import com.labformjava.labformjava.dto.UserTokenDto;
 import com.labformjava.labformjava.entity.User;
 import com.labformjava.labformjava.exception.ResourceNotFoundException;
 import com.labformjava.labformjava.exception.UnauthorizedException;
@@ -82,14 +84,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String loginUser(LoginRequestDto lrDto) {
-        System.out.println(lrDto.getLogin());
-        System.out.println(lrDto.getPassword());
         String hashPassword = userRepository.hashPassword(lrDto.getLogin());
         boolean match = passwordEncoder.matches(lrDto.getPassword(), hashPassword);
-        System.out.println(match);
         if(!match) {
             throw new UnauthorizedException("Password incorrect");
         }
         return userRepository.getToken(lrDto.getLogin());
+    }
+
+    @Override
+    public UserDataDto getUserDataByToken(UserTokenDto userTokenDto) {
+        UserDataDto userDataDto = new UserDataDto();
+        String login = userRepository.getLoginByToken(userTokenDto.getToken());
+        if(login == null || login.isEmpty()) {
+            throw new UnauthorizedException("Token incorrect");
+        }
+        //String name = userRepository.getName
+
+        userDataDto.setLogin(login);
+        return userDataDto;
     }
 }

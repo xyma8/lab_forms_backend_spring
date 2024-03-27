@@ -10,4 +10,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Procedure("get_token_by_login")
     String getToken(String login);
+
+    @Procedure("get_login_by_token")
+    String getLoginByToken(String login);
+
 }

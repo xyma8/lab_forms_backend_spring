@@ -1,7 +1,9 @@
 package com.labformjava.labformjava.controller;
 
 import com.labformjava.labformjava.dto.LoginRequestDto;
+import com.labformjava.labformjava.dto.UserDataDto;
 import com.labformjava.labformjava.dto.UserDto;
+import com.labformjava.labformjava.dto.UserTokenDto;
 import com.labformjava.labformjava.entity.User;
 import com.labformjava.labformjava.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -31,7 +33,14 @@ public class UserController {
         String token = userService.loginUser(loginRequestDto);
         return ResponseEntity.ok(token);
     }
-    //Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='
+
+    @PostMapping("/data")
+    public ResponseEntity<UserDataDto> getUserDataByToken(@RequestBody UserTokenDto userTokenDto) {
+        //String token = userTokenDto.getToken();
+        //System.out.println(token);
+        UserDataDto userDataDto = userService.getUserDataByToken(userTokenDto);
+        return ResponseEntity.ok(userDataDto);
+    }
 
     //Build Get User REST API
     @GetMapping("{id}")
