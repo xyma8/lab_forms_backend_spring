@@ -82,26 +82,34 @@ public class UserServiceImpl implements UserService {
         return UserMapper.mapToUserDto(updatedUserObj);
     }
 
-    @Override
     public String loginUser(LoginRequestDto lrDto) {
-        String hashPassword = userRepository.hashPassword(lrDto.getLogin());
+        User user = userRepository.findByLogin(lrDto.getLogin());
+        String hashPassword = user.getPassword();
         boolean match = passwordEncoder.matches(lrDto.getPassword(), hashPassword);
         if(!match) {
             throw new UnauthorizedException("Password incorrect");
         }
-        return userRepository.getToken(lrDto.getLogin());
+
+        return user.getToken();
     }
 
     @Override
-    public UserDataDto getUserDataByToken(UserTokenDto userTokenDto) {
-        UserDataDto userDataDto = new UserDataDto();
-        String login = userRepository.getLoginByToken(userTokenDto.getToken());
-        if(login == null || login.isEmpty()) {
+    public UserDto getUserDataByToken(UserTokenDto userTokenDto) {
+        User user = userRepository.findByToken(userTokenDto.getToken());
+        if(user.getLogin() == null || user.getLogin().isEmpty()) {
             throw new UnauthorizedException("Token incorrect");
         }
-        //String name = userRepository.getName
 
-        userDataDto.setLogin(login);
-        return userDataDto;
+        return UserMapper.mapToUserDto(user);
+    }
+
+    @Override
+    public int getUserTheme(String token) {
+        User user = userRepository.findByToken(token);
+        if(user.getLogin() == null || user.getLogin().isEmpty()) {
+            throw new UnauthorizedException("Token incorrect");
+        }
+
+        return user.getDarktheme();
     }
 }

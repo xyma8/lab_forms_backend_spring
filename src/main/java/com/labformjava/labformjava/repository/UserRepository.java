@@ -5,13 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Procedure("get_hash_password_by_login")
-    String hashPassword(String login);
-
-    @Procedure("get_token_by_login")
-    String getToken(String login);
-
     @Procedure("get_login_by_token")
     String getLoginByToken(String login);
+
+    User findByLogin(String login);
+
+    User findByToken(String token);
 
 }

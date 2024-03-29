@@ -18,5 +18,7 @@ public interface UserService {
 
     String loginUser(LoginRequestDto loginRequestDto);
 
-    UserDataDto getUserDataByToken(UserTokenDto userTokenDto);
+    UserDto getUserDataByToken(UserTokenDto userTokenDto);
+
+    int getUserTheme(String token);
 }

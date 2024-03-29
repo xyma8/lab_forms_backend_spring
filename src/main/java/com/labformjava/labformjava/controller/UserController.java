@@ -36,10 +36,22 @@ public class UserController {
 
     @PostMapping("/data")
     public ResponseEntity<UserDataDto> getUserDataByToken(@RequestBody UserTokenDto userTokenDto) {
-        //String token = userTokenDto.getToken();
-        //System.out.println(token);
-        UserDataDto userDataDto = userService.getUserDataByToken(userTokenDto);
+        UserDto userDto = userService.getUserDataByToken(userTokenDto);
+        UserDataDto userDataDto = new UserDataDto();
+        userDataDto.setLogin(userDto.getLogin());
+        userDataDto.setName(userDto.getName());
         return ResponseEntity.ok(userDataDto);
+    }
+
+    @GetMapping("/token")
+    public ResponseEntity<Integer> getUserTheme(@RequestHeader("TokenAuth") String token) {
+        int theme = userService.getUserTheme(token);
+        return ResponseEntity.ok(theme);
+    }
+
+    @PostMapping("/token/set")
+    public ResponseEntity<Integer> setUserTheme() {
+        return null;
     }
 
     //Build Get User REST API

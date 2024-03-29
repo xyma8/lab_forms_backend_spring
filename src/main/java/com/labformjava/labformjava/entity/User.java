@@ -3,12 +3,6 @@ package com.labformjava.labformjava.entity;
 import jakarta.persistence.*;
 
 @Entity
-@NamedStoredProcedureQuery(name = "users.get_hash_password_by_login", procedureName = "get_hash_password_by_login", parameters = {
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "login", type = String.class),
-        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "hash_password", type = String.class) })
-@NamedStoredProcedureQuery(name = "users.get_token_by_login", procedureName = "get_token_by_login", parameters = {
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "login", type = String.class),
-        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "token", type = String.class) })
 @NamedStoredProcedureQuery(name = "users.get_login_by_token", procedureName = "get_login_by_token", parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "token", type = String.class),
         @StoredProcedureParameter(mode = ParameterMode.OUT, name = "login", type = String.class) })
@@ -30,11 +24,11 @@ public class User {
     @Column(nullable = false)
     private int gender;
     @Column(nullable = false)
-    private boolean darktheme;
+    private int darktheme;
     @Column(nullable = false)
     private String token;
 
-    public User(Long id, String name, String surname, String email, String login, String password, int gender, boolean darktheme, String token) {
+    public User(Long id, String name, String surname, String email, String login, String password, int gender, int darktheme, String token) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -106,11 +100,11 @@ public class User {
         this.gender = gender;
     }
 
-    public boolean isDarktheme() {
+    public int getDarktheme() {
         return darktheme;
     }
 
-    public void setDarktheme(boolean darktheme) {
+    public void setDarktheme(int darktheme) {
         this.darktheme = darktheme;
     }
 

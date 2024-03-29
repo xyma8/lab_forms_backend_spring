@@ -8,14 +8,14 @@ public class UserDto {
     private String login;
     private String password;
     private int gender;
-    private boolean darktheme;
+    private int darktheme;
     private String token;
 
     public UserDto() {
 
     }
 
-    public UserDto(Long id, String name, String surname, String email, String login, String password, int gender, boolean darktheme, String token) {
+    public UserDto(Long id, String name, String surname, String email, String login, String password, int gender, int darktheme, String token) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -83,11 +83,11 @@ public class UserDto {
         this.gender = gender;
     }
 
-    public boolean isDarktheme() {
+    public int getDarktheme() {
         return darktheme;
     }
 
-    public void setDarktheme(boolean darktheme) {
+    public void setDarktheme(int darktheme) {
         this.darktheme = darktheme;
     }
 

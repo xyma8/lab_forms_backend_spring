@@ -13,7 +13,7 @@ public class UserMapper {
                 user.getLogin(),
                 user.getPassword(),
                 user.getGender(),
-                user.isDarktheme(),
+                user.getDarktheme(),
                 user.getToken()
         );
     }
@@ -27,7 +27,7 @@ public class UserMapper {
                 userDto.getLogin(),
                 userDto.getPassword(),
                 userDto.getGender(),
-                userDto.isDarktheme(),
+                userDto.getDarktheme(),
                 userDto.getToken()
         );
     }
