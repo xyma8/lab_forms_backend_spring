@@ -4,6 +4,7 @@ import com.labformjava.labformjava.dto.LoginRequestDto;
 import com.labformjava.labformjava.dto.UserDataDto;
 import com.labformjava.labformjava.dto.UserDto;
 import com.labformjava.labformjava.dto.UserTokenDto;
+import com.labformjava.labformjava.entity.User;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface UserService {
 
     String loginUser(LoginRequestDto loginRequestDto);
 
-    UserDto getUserDataByToken(UserTokenDto userTokenDto);
+    UserDto getUserDataByToken(String token);
 
-    int getUserTheme(String token);
+    UserDto changeTheme(String token);
 }

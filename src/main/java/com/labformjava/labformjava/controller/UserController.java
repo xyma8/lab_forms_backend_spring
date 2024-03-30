@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -25,7 +26,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         UserDto savedUser = userService.createUser(userDto);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -34,24 +35,27 @@ public class UserController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/data")
-    public ResponseEntity<UserDataDto> getUserDataByToken(@RequestBody UserTokenDto userTokenDto) {
-        UserDto userDto = userService.getUserDataByToken(userTokenDto);
+    @GetMapping("/data")
+    public ResponseEntity<UserDataDto> getUserDataByToken(@RequestHeader("TokenAuth") String token) {
+        UserDto userDto = userService.getUserDataByToken(token);
         UserDataDto userDataDto = new UserDataDto();
         userDataDto.setLogin(userDto.getLogin());
         userDataDto.setName(userDto.getName());
         return ResponseEntity.ok(userDataDto);
     }
 
-    @GetMapping("/token")
+    @GetMapping("/theme")
     public ResponseEntity<Integer> getUserTheme(@RequestHeader("TokenAuth") String token) {
-        int theme = userService.getUserTheme(token);
+        UserDto userDto = userService.getUserDataByToken(token);
+        int theme = userDto.getDarktheme();
         return ResponseEntity.ok(theme);
     }
 
-    @PostMapping("/token/set")
-    public ResponseEntity<Integer> setUserTheme() {
-        return null;
+    @PutMapping("/theme/change")
+    public ResponseEntity<Integer> setUserTheme(@RequestHeader("TokenAuth") String token) {
+        UserDto userDto = userService.changeTheme(token);
+        int theme = userDto.getDarktheme();
+        return ResponseEntity.ok(theme);
     }
 
     //Build Get User REST API

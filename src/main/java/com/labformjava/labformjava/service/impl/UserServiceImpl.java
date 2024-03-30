@@ -5,6 +5,7 @@ import com.labformjava.labformjava.dto.UserDataDto;
 import com.labformjava.labformjava.dto.UserDto;
 import com.labformjava.labformjava.dto.UserTokenDto;
 import com.labformjava.labformjava.entity.User;
+import com.labformjava.labformjava.exception.ConflictException;
 import com.labformjava.labformjava.exception.ResourceNotFoundException;
 import com.labformjava.labformjava.exception.UnauthorizedException;
 import com.labformjava.labformjava.mapper.UserMapper;
@@ -48,6 +49,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = UserMapper.mapToUser(userDto);
+        User checkLogin = userRepository.findByLogin(user.getLogin());
+        if(checkLogin != null) {
+            throw new ConflictException("login " + user.getLogin() + " is already taken");
+        }
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         user.setToken(generateToken(user.getLogin()));
@@ -94,8 +99,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserDataByToken(UserTokenDto userTokenDto) {
-        User user = userRepository.findByToken(userTokenDto.getToken());
+    public UserDto getUserDataByToken(String token) {
+        User user = userRepository.findByToken(token);
         if(user.getLogin() == null || user.getLogin().isEmpty()) {
             throw new UnauthorizedException("Token incorrect");
         }
@@ -104,12 +109,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getUserTheme(String token) {
+    public UserDto changeTheme(String token) {
         User user = userRepository.findByToken(token);
         if(user.getLogin() == null || user.getLogin().isEmpty()) {
             throw new UnauthorizedException("Token incorrect");
         }
+        user.setDarktheme(user.getDarktheme() == 0 ? 1 : 0);
+        userRepository.save(user);
 
-        return user.getDarktheme();
+        return UserMapper.mapToUserDto(user);
     }
+
 }
