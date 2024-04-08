@@ -89,6 +89,9 @@ public class UserServiceImpl implements UserService {
 
     public String loginUser(LoginRequestDto lrDto) {
         User user = userRepository.findByLogin(lrDto.getLogin());
+        if(user == null) {
+            throw new UnauthorizedException("Login incorrect");
+        }
         String hashPassword = user.getPassword();
         boolean match = passwordEncoder.matches(lrDto.getPassword(), hashPassword);
         if(!match) {

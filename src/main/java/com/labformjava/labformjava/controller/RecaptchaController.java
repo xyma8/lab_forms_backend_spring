@@ -22,7 +22,7 @@ public class RecaptchaController {
     }
 
     @GetMapping
-    public ResponseEntity<?> verifyRecaptcha(@RequestHeader("token") String recaptchaResponse) {
+    public ResponseEntity<?> verifyRecaptcha(@RequestHeader("TokenAuth") String recaptchaResponse) {
         String url = "https://www.google.com/recaptcha/api/siteverify";
         String params = "?secret=" + RECAPTCHA_SECRET_KEY + "&response=" + recaptchaResponse;
         System.out.println(recaptchaResponse);

@@ -1,14 +1,12 @@
 package com.labformjava.labformjava.controller;
 
-import com.labformjava.labformjava.dto.LoginRequestDto;
-import com.labformjava.labformjava.dto.UserDataDto;
-import com.labformjava.labformjava.dto.UserDto;
-import com.labformjava.labformjava.dto.UserTokenDto;
+import com.labformjava.labformjava.dto.*;
 import com.labformjava.labformjava.entity.User;
 import com.labformjava.labformjava.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -30,9 +28,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<UserTokenDto> loginUser(@RequestBody LoginRequestDto loginRequestDto) {
         String token = userService.loginUser(loginRequestDto);
-        return ResponseEntity.ok(token);
+        UserTokenDto userTokenDto = new UserTokenDto();
+        userTokenDto.setToken(token);
+        return ResponseEntity.ok(userTokenDto);
     }
 
     @GetMapping("/data")
@@ -45,17 +45,21 @@ public class UserController {
     }
 
     @GetMapping("/theme")
-    public ResponseEntity<Integer> getUserTheme(@RequestHeader("TokenAuth") String token) {
+    public ResponseEntity<UserThemeDto> getUserTheme(@RequestHeader("TokenAuth") String token) {
         UserDto userDto = userService.getUserDataByToken(token);
         int theme = userDto.getDarktheme();
-        return ResponseEntity.ok(theme);
+        UserThemeDto userThemeDto = new UserThemeDto();
+        userThemeDto.setTheme(theme);
+        return ResponseEntity.ok(userThemeDto);
     }
 
-    @PutMapping("/theme/change")
-    public ResponseEntity<Integer> setUserTheme(@RequestHeader("TokenAuth") String token) {
-        UserDto userDto = userService.changeTheme(token);
+    @PostMapping("/theme/change")
+    public ResponseEntity<UserThemeDto> setUserTheme(@RequestBody UserTokenDto userTokenDto) {
+        UserDto userDto = userService.changeTheme(userTokenDto.getToken());
         int theme = userDto.getDarktheme();
-        return ResponseEntity.ok(theme);
+        UserThemeDto userThemeDto = new UserThemeDto();
+        userThemeDto.setTheme(theme);
+        return ResponseEntity.ok(userThemeDto);
     }
 
     //Build Get User REST API
