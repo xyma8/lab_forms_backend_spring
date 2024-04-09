@@ -1,6 +1,5 @@
 package com.labformjava.labformjava.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,12 +12,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserAuthenthicationEntryPoint userAuthenthicationEntryPoint;
+    //private final UserAuthenthicationEntryPoint userAuthenthicationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,16 +27,8 @@ public class SecurityConfig {
                                 new CorsConfiguration().applyPermitDefaultValues())
 
                 )
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
-                .exceptionHandling().authenticationEntryPoint(userAuthenthicationEntryPoint)
-                .and()
-                .addFilterBefore(new JwtAuthFilter(), BasicAuthenticationFilter.class)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests((request) ->
-                        .requstMatcher(HttpMethod.POST, "/login", "/registration").permitAll()
-                        .anyRequest().authenticated()
-                );
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
         return http.build();
     }
